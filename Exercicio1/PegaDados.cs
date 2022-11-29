@@ -5,6 +5,7 @@ namespace Exercicio1
 {
     internal class PegaDados
     {
+        Controlador controlador = new Controlador();
         public void AbreJson()
         {
             string text = File.ReadAllText(@".\json\clientes.json");
@@ -30,9 +31,8 @@ namespace Exercicio1
                     }catch(Exception ArgumentException){
                         dicionarioClientes[chave] = value;
                     }
-                    Controlador.
-                    Console.WriteLine($"{chave}: {value}");
                 }
+               // controlador.ValidaDados(dicionarioClientes);
             }
 
         }
