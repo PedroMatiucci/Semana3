@@ -5,7 +5,6 @@ namespace Exercicio1
 {
     internal class ValidadorRenda : AbstractValidador
     {
-        Validator validator = new Validator();
         public override string MensagemErro()
         {
             return "Por Favor Digite Uma Renda Valida";
@@ -17,19 +16,33 @@ namespace Exercicio1
             return "renda_mensal";
         }
 
-        public override bool Verifica(string dadoVerifica)
+        public override List<string>? Verifica(string dadoVerifica)
         {
-            string pattern = @"^\d+,\d{2}$";
-            Regex rg = new Regex(pattern);
-            Match m = rg.Match(dadoVerifica);
-            if (m.Success)
+            List<string> result = new List<string>();
+            if (dadoVerifica == null)
             {
-                return true;
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
             }
             else
             {
-                validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-                return false;
+
+                string pattern = @"^\d+,\d{2}$";
+                Regex rg = new Regex(pattern);
+                Match m = rg.Match(dadoVerifica);
+                if (m.Success)
+                {
+                    return null;
+                }
+                else
+                {
+                    result.Add(dadoVerifica);
+                    result.Add(Nome());
+                    result.Add(MensagemErro());
+                    return result;
+                }
             }
         }
     }

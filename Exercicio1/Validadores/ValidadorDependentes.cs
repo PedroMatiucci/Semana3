@@ -5,7 +5,6 @@ namespace Exercicio1
 {
     internal class ValidadorDependentes : AbstractValidador
     {
-        Validator validator = new Validator();
         public override string MensagemErro()
         {
             return "Por Favor Digite Um Numero Entre 0 e 10";
@@ -17,19 +16,29 @@ namespace Exercicio1
             return "dependentes";
         }
 
-        public override bool Verifica(string dadoVerifica)
+        public override List<string>? Verifica(string dadoVerifica)
         {
+            List<string> result = new List<string>();
+            if (dadoVerifica == null)
+            {
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
+            }
             string pattern = @"\b([0-9]|10)\b";
             Regex rg = new Regex(pattern);
             Match m = rg.Match(dadoVerifica);
             if (m.Success)
             {
-                return true;
+                return null;
             }
             else
             {
-                validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-                return false;
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
             }
         }
 

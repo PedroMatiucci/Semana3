@@ -2,7 +2,6 @@
 {
     internal class ValidadorNome : AbstractValidador
     {
-        Validator validator = new Validator();
         public override string MensagemErro()
         {
             return "Erro Seu Nome Precisa Ter Mais de 5 Caracteres";
@@ -13,16 +12,26 @@
             return "nome";
         }
 
-        public override bool Verifica(string dadoVerifica)
+        public override List<string>? Verifica(string dadoVerifica)
         {
+            List<string> result = new List<string>();
+            if (dadoVerifica == null)
+            {
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
+            }
             if (dadoVerifica.Length < 5)
             {
-                validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-                return false;
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
             }
             else
             {
-                return true;
+                return null;
             }
         }
     }

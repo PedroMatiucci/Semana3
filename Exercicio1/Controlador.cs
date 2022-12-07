@@ -1,31 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace Exercicio1
 {
     internal class Controlador
     {
+        List<object> listaClientes = new List<object>();
         Validator validator = new Validator();
         PegaDados pegaDados = new PegaDados();
-        public void ValidaDados(Dictionary<string, string> dados)
+        public void ValidaDados(List<object> dados)
         {
-           Erro erro = validator.ValidaDados(dados);
-            EscreveJson(erro);
+            List<Erro> listaErros = validator.ValidaDados(dados);
+            EscreveJson(listaErros);
         }
 
-        public void EscreveJson(Erro erro)
+        public void EscreveJson(List<Erro> listaErro)
         {
-            var json = JsonSerializer.Serialize(erro);
-            Console.WriteLine(json);
+            string fullPath = @"C:\Users\Carla\Desktop\json\jsonErros.txt";
+            var jsonString = JsonSerializer.Serialize(listaErro);
+            Console.WriteLine(jsonString);
+            File.WriteAllText(fullPath, jsonString);
+
         }
 
         public void Start()
         {
-            pegaDados.AbreJson();
+            listaClientes = pegaDados.AbreJson();
+            ValidaDados(listaClientes);
+
         }
 
 

@@ -4,7 +4,7 @@
     {   
         public abstract string MensagemErro();
 
-        public abstract bool Verifica(string dadoVerifica);
+        public abstract List<string> Verifica(string dadoVerifica);
 
         public abstract string Nome();
 

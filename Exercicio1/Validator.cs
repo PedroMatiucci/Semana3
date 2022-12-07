@@ -1,6 +1,4 @@
-﻿using static Exercicio1.ValidadorNome;
-
-namespace Exercicio1
+﻿namespace Exercicio1
 {
     internal class Validator
     {
@@ -12,31 +10,35 @@ namespace Exercicio1
         ValidadorDependentes validatorDependentes = new ValidadorDependentes();
         List<string> dados = new List<string>();
         Dictionary<string, string> dicErros = new Dictionary<string, string>();
+        List<Erro> listaErros = new List<Erro>();
 
-
-        public Erro ValidaDados(Dictionary<string, string> dicDados)
+        public List<Erro> ValidaDados(List<object> dadosClientes)
         {
-            validatorNome.Verifica(dicDados["nome"]);
-            validatorCpf.Verifica(dicDados["cpf"]);
-            validatorDataNascimento.Verifica(dicDados["dt_nascimento"]);
-            validatorRenda.Verifica(dicDados["renda_mensal"]);
-            validatorEstado.Verifica(dicDados["estado_civil"]);
-            validatorDependentes.Verifica(dicDados["dependentes"]);
-            Erro erro = new Erro(dados, dicErros);
-            dados.RemoveRange(0, dados.Count);
-            foreach(KeyValuePair<string,string> valor in dicErros)
+            foreach (ClienteNaoValidado cliente in dadosClientes)
             {
-                dicErros.Remove(valor.Key);
+                AdicionaErros(validatorNome.Verifica(cliente.Nome));
+                AdicionaErros(validatorCpf.Verifica(cliente.Cpf));
+                AdicionaErros(validatorDataNascimento.Verifica(cliente.DataDeNascimento));
+                AdicionaErros(validatorRenda.Verifica(cliente.RendaMensal));
+                AdicionaErros(validatorEstado.Verifica(cliente.EstadoCivil));
+                AdicionaErros(validatorDependentes.Verifica(cliente.Dependentes));
+                Erro erro = new Erro(dados, dicErros);
+                listaErros.Add(erro);
+                dados.Clear();
+                dicErros.Clear();
             }
-            return erro;
             
+            return listaErros;
         }
 
-        public void AdicionaErros(string dado, string nomeCampo, string mensagemErro)
+        public void AdicionaErros(List<string> dadosValidados)
         {
-            dados.Add(dado);
-            dicErros.Add(nomeCampo, mensagemErro);
-        } 
+            if (dadosValidados != null)
+            {
+                dados.Add(dadosValidados[0]);
+                dicErros.Add(dadosValidados[1], dadosValidados[2]);
+            }
+        }
 
 
     }

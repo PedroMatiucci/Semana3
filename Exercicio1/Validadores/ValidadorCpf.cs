@@ -5,7 +5,6 @@ namespace Exercicio1
 {
     internal class ValidadorCpf : AbstractValidador
     {
-        Validator validator = new Validator();
         public override string MensagemErro()
         {
             return "Cpf Invalido";
@@ -16,8 +15,16 @@ namespace Exercicio1
             return "cpf";
         }
 
-        public override bool Verifica(string dadoVerifica)
+        public override List<string>? Verifica(string dadoVerifica)
         {
+            List<string> result = new List<string>();
+            if (dadoVerifica == null)
+            {
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
+            }
             string pattern = @"^\d{11}$";
             Regex rg = new Regex(pattern);
             Match m = rg.Match(dadoVerifica);
@@ -30,17 +37,21 @@ namespace Exercicio1
                 {
                     if (DigitoVerificador(dadoVerifica))
                     {
-                        return true;
+                        return null;
                     }
                     else
                     {
-                        validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-                        return false;
+                        result.Add(dadoVerifica);
+                        result.Add(Nome());
+                        result.Add(MensagemErro());
+                        return result;
                     }
                 }
             }
-            validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-            return false;
+            result.Add(dadoVerifica);
+            result.Add(Nome());
+            result.Add(MensagemErro());
+            return result;
         }
         public bool DigitoVerificador(string dadoVerifica)
         {

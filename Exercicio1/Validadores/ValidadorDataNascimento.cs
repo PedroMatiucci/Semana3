@@ -6,8 +6,6 @@ namespace Exercicio1
 {
     internal class ValidadorDataNascimento : AbstractValidador
     {
-        Validator validator = new Validator();
-
         public override string MensagemErro()
         {
             return "Por Favor Digite uma Data Valida";
@@ -19,8 +17,16 @@ namespace Exercicio1
             return "dt_nascimento";
         }
 
-        public override bool Verifica(string dadoVerifica)
+        public override List<string>? Verifica(string dadoVerifica)
         {
+            List<string> result = new List<string>();
+            if (dadoVerifica == null)
+            {
+                result.Add(dadoVerifica);
+                result.Add(Nome());
+                result.Add(MensagemErro());
+                return result;
+            }
             string pattern = @"^\d{2}\/\d{2}\/\d{4}$";
             Regex rg = new Regex(pattern);
             Match m1 = rg.Match(dadoVerifica);
@@ -28,7 +34,10 @@ namespace Exercicio1
             {
                 if (m1.Success == false)
                 {
-                    return false;
+                    result.Add(dadoVerifica);
+                    result.Add(Nome());
+                    result.Add(MensagemErro());
+                    return result;
                 }
                 else
                 {
@@ -39,7 +48,10 @@ namespace Exercicio1
                     }
                     catch (FormatException)
                     {
-                        return false;
+                        result.Add(dadoVerifica);
+                        result.Add(Nome());
+                        result.Add(MensagemErro());
+                        return result;
 
                     }
                     int now = int.Parse(DateTime.Now.ToString("yyyyMMdd"));
@@ -47,12 +59,14 @@ namespace Exercicio1
                     int age = (now - dob) / 10000;
                     if (age >= 18)
                     {
-                        return true;
+                        return null;
                     }
                     else
                     {
-                        validator.AdicionaErros(dadoVerifica, Nome(), MensagemErro());
-                        return false;
+                        result.Add(dadoVerifica);
+                        result.Add(Nome());
+                        result.Add(MensagemErro());
+                        return result; ;
                     }
                 }
             }

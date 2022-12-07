@@ -1,42 +1,40 @@
-﻿using System.Text.Json;
+﻿using System.Reflection.Metadata;
+using System.Text.Json;
 
 
 namespace Exercicio1
 {
     internal class PegaDados
     {
-        Controlador controlador = new Controlador();
-        public void AbreJson()
+        List<object> listaCliente = new List<object>();
+
+        public List<object> AbreJson()
         {
             string text = File.ReadAllText(@".\json\clientes.json");
-            Dictionary<string, string> dicionarioClientes = new Dictionary<string, string>();   
             using var doc = JsonDocument.Parse(text);
+            List<string> listaDados = new List<string>();
             JsonElement root = doc.RootElement;
 
-            var users = root.EnumerateArray();
+            var clientes = root.EnumerateArray();
 
-            while (users.MoveNext())
+            while (clientes.MoveNext())
             {
-                var user = users.Current;
-                var props = user.EnumerateObject();
+                var cliente = clientes.Current;
+                var props = cliente.EnumerateObject();
 
                 while (props.MoveNext())
                 {
                     var prop = props.Current;
-                    string chave = prop.Name;
-                    string value = prop.Value.ToString();
-                    try
-                    {
-                        dicionarioClientes.Add(chave, value);
-                    }catch(Exception ArgumentException){
-                        dicionarioClientes[chave] = value;
-                    }
+                    listaDados.Add(prop.Value.ToString());
                 }
-               // controlador.ValidaDados(dicionarioClientes);
+                ClienteNaoValidado clinteTemp = new ClienteNaoValidado(listaDados[0], listaDados[1], listaDados[2], listaDados[3], listaDados[4], listaDados[5]);
+                listaDados.Clear();
+                listaCliente.Add(clinteTemp);
+
             }
+            return listaCliente;
 
         }
-
     }
 }
 
